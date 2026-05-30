@@ -1,0 +1,1 @@
+javascript:(function(){Game.Earn(10000000000);alert("10 Billion Cookies Added!");})();
