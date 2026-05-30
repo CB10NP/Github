@@ -1,0 +1,4 @@
+//fixed 
+//
+//
+javascript:(function(){const chars='ABCDEFGHIJKLMNOPQRSTUVWXYZ';let res='';for(let i=0;i<8;i++)res+=chars.charAt(Math.floor(Math.random()*chars.length));alert("Random Text: "+res);})();
