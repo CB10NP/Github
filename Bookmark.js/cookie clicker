@@ -1,1 +1,0 @@
-javascript:(function(){try{document.cookie="myCookie=100000000000;max-age=10000;path=/";alert("cookies set")}catch(e){alert("error: doesn't work")}})();
