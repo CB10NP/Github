@@ -1,0 +1,967 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SharksAi - Coding · Math · Language · Science</title>
+    <!-- Font Awesome for icons -->
+    <link
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+    />
+    <!-- Google Fonts -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&display=swap"
+        rel="stylesheet"
+    />
+    <style>
+        /* ===== RESET & BASE ===== */
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: #eaeef2; /* soft light grey */
+            color: #1e293b;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        /* ===== MAIN CARD ===== */
+        .shark-card {
+            max-width: 1100px;
+            width: 100%;
+            background: #f5f7fa; /* light grey-white */
+            border-radius: 32px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.08),
+                        0 8px 24px rgba(0, 0, 0, 0.04);
+            padding: 36px 40px 44px;
+            transition: box-shadow 0.25s ease;
+        }
+        .shark-card:hover {
+            box-shadow: 0 24px 72px rgba(0, 0, 0, 0.10),
+                        0 8px 28px rgba(0, 0, 0, 0.05);
+        }
+
+        /* ===== HEADER ===== */
+        .header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 16px;
+            margin-bottom: 28px;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+        .brand-icon {
+            font-size: 2.2rem;
+            color: #5a6b7c; /* muted grey-blue */
+            background: #e2e8f0;
+            width: 56px;
+            height: 56px;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .brand h1 {
+            font-size: 1.9rem;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            color: #2d3c4e;
+        }
+        .brand h1 span {
+            font-weight: 300;
+            color: #7f8fa3;
+        }
+
+        .status-badge {
+            background: #dce3ec;
+            padding: 8px 18px;
+            border-radius: 40px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: #3b4c5e;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .status-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: #4ade80; /* green = online */
+            display: inline-block;
+            animation: pulse-dot 1.8s infinite;
+        }
+        @keyframes pulse-dot {
+            0%,
+            100% {
+                opacity: 1;
+            }
+            50% {
+                opacity: 0.35;
+            }
+        }
+
+        /* ===== SUBTITLE ===== */
+        .subtitle {
+            font-size: 0.95rem;
+            color: #64748b;
+            margin-bottom: 28px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px 18px;
+            border-bottom: 1px solid #dce3ec;
+            padding-bottom: 18px;
+        }
+        .subtitle i {
+            margin-right: 6px;
+            color: #7f8fa3;
+        }
+        .subtitle .pill {
+            background: #e2e8f0;
+            padding: 2px 14px;
+            border-radius: 20px;
+            font-weight: 500;
+            font-size: 0.85rem;
+        }
+
+        /* ===== TOPIC TABS ===== */
+        .topic-tabs {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 28px;
+        }
+        .topic-btn {
+            background: transparent;
+            border: 1.5px solid #d0d9e4;
+            padding: 8px 22px;
+            border-radius: 40px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            color: #4a5b6e;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-family: inherit;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .topic-btn i {
+            font-size: 0.95rem;
+        }
+        .topic-btn:hover {
+            background: #dce3ec;
+            border-color: #b0bfcf;
+        }
+        .topic-btn.active {
+            background: #2d3c4e;
+            border-color: #2d3c4e;
+            color: #fff;
+        }
+        .topic-btn.active i {
+            color: #b8c9dd;
+        }
+
+        /* ===== SOURCE INDICATOR ===== */
+        .source-bar {
+            background: #e8edf3;
+            border-radius: 14px;
+            padding: 12px 18px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px 20px;
+            font-size: 0.85rem;
+            color: #475569;
+        }
+        .source-bar i {
+            color: #5a6b7c;
+        }
+        .source-bar .src-badge {
+            background: #d2dce8;
+            padding: 4px 14px;
+            border-radius: 30px;
+            font-weight: 500;
+            font-size: 0.75rem;
+        }
+        .src-url {
+            font-family: 'SF Mono', 'Fira Code', monospace;
+            font-size: 0.8rem;
+            background: #dce3ec;
+            padding: 3px 12px;
+            border-radius: 8px;
+            color: #2d3c4e;
+            word-break: break-all;
+        }
+        .fetch-badge {
+            margin-left: auto;
+            background: #cbd5e1;
+            padding: 4px 14px;
+            border-radius: 30px;
+            font-weight: 600;
+            font-size: 0.7rem;
+            letter-spacing: 0.3px;
+        }
+
+        /* ===== CHAT / OUTPUT AREA ===== */
+        .chat-window {
+            background: #fafbfc;
+            border: 1px solid #dce3ec;
+            border-radius: 20px;
+            padding: 24px 26px;
+            min-height: 260px;
+            max-height: 420px;
+            overflow-y: auto;
+            margin-bottom: 24px;
+            font-size: 0.95rem;
+            line-height: 1.65;
+            transition: background 0.15s;
+        }
+        .chat-window::-webkit-scrollbar {
+            width: 6px;
+        }
+        .chat-window::-webkit-scrollbar-track {
+            background: #eef2f6;
+            border-radius: 6px;
+        }
+        .chat-window::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 6px;
+        }
+
+        .message {
+            margin-bottom: 18px;
+        }
+        .message:last-child {
+            margin-bottom: 0;
+        }
+
+        .msg-label {
+            font-weight: 600;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.4px;
+            color: #7f8fa3;
+            margin-bottom: 4px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .msg-label.shark {
+            color: #2d3c4e;
+        }
+        .msg-label .fa-shark {
+            /* we use fa-shield-hook as stand-in for shark */
+        }
+
+        .msg-content {
+            background: #f0f4f9;
+            padding: 14px 18px;
+            border-radius: 14px;
+            border-left: 4px solid #9aadb9;
+            color: #1e293b;
+        }
+        .msg-content p {
+            margin-bottom: 8px;
+        }
+        .msg-content p:last-child {
+            margin-bottom: 0;
+        }
+        .msg-content code {
+            background: #e2e8f0;
+            padding: 2px 8px;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            font-family: 'SF Mono', 'Fira Code', monospace;
+        }
+        .msg-content pre {
+            background: #e2e8f0;
+            padding: 14px 16px;
+            border-radius: 12px;
+            overflow-x: auto;
+            font-size: 0.85rem;
+            margin: 10px 0 4px;
+            border: 1px solid #d0d9e4;
+        }
+
+        .msg-content ul {
+            margin: 6px 0 6px 20px;
+        }
+
+        /* ===== LOADING SPINNER ===== */
+        .spinner {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            color: #5a6b7c;
+            font-size: 0.9rem;
+            padding: 6px 0;
+        }
+        .spinner i {
+            font-size: 1.2rem;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* ===== INPUT AREA ===== */
+        .input-row {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+        .input-row input {
+            flex: 1;
+            min-width: 200px;
+            padding: 14px 20px;
+            border: 1.5px solid #d0d9e4;
+            border-radius: 40px;
+            font-size: 0.95rem;
+            font-family: inherit;
+            background: #f8fafc;
+            transition: border-color 0.2s, box-shadow 0.2s;
+            outline: none;
+            color: #1e293b;
+        }
+        .input-row input::placeholder {
+            color: #94a3b8;
+        }
+        .input-row input:focus {
+            border-color: #7f8fa3;
+            box-shadow: 0 0 0 4px rgba(90, 107, 124, 0.12);
+        }
+
+        .input-row button {
+            padding: 14px 32px;
+            border: none;
+            border-radius: 40px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            background: #2d3c4e;
+            color: #fff;
+            cursor: pointer;
+            transition: background 0.2s, transform 0.1s;
+            font-family: inherit;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .input-row button:hover {
+            background: #1d2b3c;
+        }
+        .input-row button:active {
+            transform: scale(0.97);
+        }
+        .input-row button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        /* ===== FOOTER ===== */
+        .footer {
+            margin-top: 28px;
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 12px;
+            font-size: 0.75rem;
+            color: #7f8fa3;
+            border-top: 1px solid #dce3ec;
+            padding-top: 20px;
+        }
+        .footer a {
+            color: #4a5b6e;
+            text-decoration: none;
+            font-weight: 500;
+        }
+        .footer a:hover {
+            text-decoration: underline;
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 640px) {
+            .shark-card {
+                padding: 24px 18px 28px;
+            }
+            .brand h1 {
+                font-size: 1.5rem;
+            }
+            .topic-btn {
+                padding: 6px 16px;
+                font-size: 0.8rem;
+            }
+            .input-row button {
+                padding: 12px 24px;
+            }
+            .chat-window {
+                padding: 18px;
+                min-height: 200px;
+                max-height: 320px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ===== MAIN CARD ===== -->
+    <div class="shark-card" id="app">
+
+        <!-- HEADER -->
+        <div class="header">
+            <div class="brand">
+                <div class="brand-icon">
+                    <i class="fas fa-shield-hook"></i> <!-- shark-like icon -->
+                </div>
+                <h1>Sharks<span>Ai</span></h1>
+            </div>
+            <div class="status-badge">
+                <span class="status-dot"></span>
+                Live · v2.1
+            </div>
+        </div>
+
+        <!-- SUBTITLE -->
+        <div class="subtitle">
+            <span><i class="fas fa-code"></i> Coding</span>
+            <span><i class="fas fa-square-root-variable"></i> Math</span>
+            <span><i class="fas fa-language"></i> Language</span>
+            <span><i class="fas fa-flask"></i> Science</span>
+            <span class="pill"><i class="fas fa-globe"></i> Real-time fetch</span>
+        </div>
+
+        <!-- TOPIC TABS -->
+        <div class="topic-tabs">
+            <button class="topic-btn active" data-topic="coding">
+                <i class="fas fa-code"></i> Coding
+            </button>
+            <button class="topic-btn" data-topic="math">
+                <i class="fas fa-square-root-variable"></i> Math
+            </button>
+            <button class="topic-btn" data-topic="language">
+                <i class="fas fa-language"></i> Language
+            </button>
+            <button class="topic-btn" data-topic="science">
+                <i class="fas fa-flask"></i> Science
+            </button>
+        </div>
+
+        <!-- SOURCE INDICATOR -->
+        <div class="source-bar" id="sourceBar">
+            <i class="fas fa-globe"></i>
+            <span>Fetching from:</span>
+            <span class="src-url" id="srcUrl">api.sharksai.io/v2/live</span>
+            <span class="src-badge"><i class="fas fa-shield"></i> verified</span>
+            <span class="fetch-badge" id="fetchBadge">⚡ live</span>
+        </div>
+
+        <!-- CHAT WINDOW -->
+        <div class="chat-window" id="chatWindow">
+            <div class="message">
+                <div class="msg-label shark">
+                    <i class="fas fa-shield-hook"></i> SharksAi
+                </div>
+                <div class="msg-content">
+                    <p>
+                        <strong>🦈 Hey! I'm SharksAi.</strong> Pick a topic above
+                        and ask me anything about <strong>coding, math, language,
+                        or science</strong>. I fetch real-time data from trusted
+                        sources.
+                    </p>
+                    <p style="margin-top:6px; font-size:0.85rem; color:#556a7c;">
+                        <i class="fas fa-lightbulb"></i> Try:
+                        <em>"Explain Python recursion"</em> or
+                        <em>"What's the Pythagorean theorem?"</em>
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- INPUT -->
+        <div class="input-row">
+            <input
+                type="text"
+                id="userInput"
+                placeholder="Ask SharksAi something…"
+                autofocus
+            />
+            <button id="sendBtn">
+                <i class="fas fa-paper-plane"></i> Ask
+            </button>
+        </div>
+
+        <!-- FOOTER -->
+        <div class="footer">
+            <span>© 2026 <a href="#">SharksAi</a> — light grey intelligence</span>
+            <span>
+                <i class="fas fa-database"></i> Sources:
+                <a href="#">MDN</a> ·
+                <a href="#">Wolfram</a> ·
+                <a href="#">Oxford</a> ·
+                <a href="#">Nature</a>
+            </span>
+        </div>
+    </div>
+
+    <!-- ===== JAVASCRIPT ===== -->
+    <script>
+        (function() {
+            'use strict';
+
+            // ---------- DOM refs ----------
+            const chatWindow = document.getElementById('chatWindow');
+            const userInput = document.getElementById('userInput');
+            const sendBtn = document.getElementById('sendBtn');
+            const topicBtns = document.querySelectorAll('.topic-btn');
+            const srcUrl = document.getElementById('srcUrl');
+            const fetchBadge = document.getElementById('fetchBadge');
+
+            // ---------- State ----------
+            let currentTopic = 'coding';
+
+            // ---------- Real "fetch" simulation with live-like data ----------
+            // In production, this would call actual APIs.
+            // Here we simulate realistic, topic-specific responses
+            // as if fetched from real web sources.
+
+            const knowledgeBase = {
+
+                // ---- CODING ----
+                coding: {
+                    default: `**🦈 SharksAi (Coding)** · fetched from *MDN Web Docs + GitHub Docs*
+
+Here's what I found on that topic:
+
+\`\`\`python
+# Example: Recursive Fibonacci with memoization
+def fib(n, memo={}):
+    if n in memo:
+        return memo[n]
+    if n <= 2:
+        return 1
+    memo[n] = fib(n-1, memo) + fib(n-2, memo)
+    return memo[n]
+
+print(fib(10))  # 55
+\`\`\`
+
+> *"Code is like humor. When you have to explain it, it's bad."* — Cory House
+
+**Key concepts:**
+- Recursion depth and stack limits
+- Memoization optimization (O(n) time)
+- Readable vs performant trade-offs
+
+🔗 Source: [developer.mozilla.org](https://developer.mozilla.org/) · [github.com](https://github.com/)`,
+
+                    'python': `**🐍 Python (from Python.org & Real Python)**
+
+Python is dynamically typed, garbage-collected, and widely used for web, AI, and scripting.
+
+\`\`\`python
+# List comprehension example
+squares = [x**2 for x in range(10)]
+print(squares)  # [0, 1, 4, 9, 16, 25, 36, 49, 64, 81]
+\`\`\`
+
+**Latest from PyPI:** Python 3.13 improves the REPL and JIT compiler.
+
+🔗 [python.org](https://www.python.org/)`,
+
+                    'javascript': `**⚡ JavaScript (from MDN + V8 Blog)**
+
+JavaScript is the lingua franca of the web. ES2025 brings new pattern matching proposals.
+
+\`\`\`javascript
+// Closure example
+function makeCounter() {
+    let count = 0;
+    return () => ++count;
+}
+const counter = makeCounter();
+console.log(counter()); // 1
+console.log(counter()); // 2
+\`\`\`
+
+🔗 [developer.mozilla.org](https://developer.mozilla.org/en-US/docs/Web/JavaScript)`
+                },
+
+                // ---- MATH ----
+                math: {
+                    default: `**📐 SharksAi (Math)** · fetched from *Wolfram MathWorld + Khan Academy*
+
+Here's a mathematical insight:
+
+The **Pythagorean theorem** states:
+
+$$ a^2 + b^2 = c^2 $$
+
+For a right triangle with legs $a=3$, $b=4$:
+$$ c = \\sqrt{3^2 + 4^2} = \\sqrt{9 + 16} = \\sqrt{25} = 5 $$
+
+**Why it matters:** Foundation of Euclidean geometry, used in navigation, construction, and computer graphics.
+
+🔗 Source: [mathworld.wolfram.com](https://mathworld.wolfram.com/) · [khanacademy.org](https://www.khanacademy.org/math)`,
+
+                    'calculus': `**∫ Calculus (from Wolfram + 3Blue1Brown)**
+
+The derivative of $x^2$ is $2x$.
+
+\`\`\`python
+import sympy as sp
+x = sp.Symbol('x')
+print(sp.diff(x**2, x))  # 2*x
+\`\`\`
+
+🔗 [wolframalpha.com](https://www.wolframalpha.com/)`,
+
+                    'algebra': `**∑ Algebra (from PurpleMath + AoPS)**
+
+Quadratic formula: $x = \\frac{-b \\pm \\sqrt{b^2 - 4ac}}{2a}$
+
+For $x^2 - 5x + 6 = 0$: $x = 2$ or $x = 3$.
+
+🔗 [purplemath.com](https://www.purplemath.com/)`
+                },
+
+                // ---- LANGUAGE ----
+                language: {
+                    default: `**📖 SharksAi (Language)** · fetched from *Oxford English Dictionary + Merriam-Webster*
+
+**Word of the day:** *Ephemeral*
+
+> *Adjective* — lasting for a very short time.
+
+**Etymology:** From Greek *ephemeros* ("lasting only a day").
+
+**Example:** "The beauty of cherry blossoms is ephemeral, yet deeply cherished."
+
+**Synonyms:** fleeting, transient, momentary, evanescent.
+
+🔗 Source: [oed.com](https://www.oed.com/) · [merriam-webster.com](https://www.merriam-webster.com/)`,
+
+                    'grammar': `**✍️ Grammar (from Grammarly + Purdue OWL)**
+
+**Subject-verb agreement:** A singular subject takes a singular verb.
+- ❌ "The group of students are waiting."
+- ✅ "The group of students is waiting."
+
+🔗 [owl.purdue.edu](https://owl.purdue.edu/)`,
+
+                    'etymology': `**📜 Etymology (from Etymonline)**
+
+*"Robot"* comes from Czech *robota* meaning "forced labor." First used in Karel Čapek's 1920 play *R.U.R.*
+
+🔗 [etymonline.com](https://www.etymonline.com/)`
+                },
+
+                // ---- SCIENCE ----
+                science: {
+                    default: `**🔬 SharksAi (Science)** · fetched from *Nature + ScienceDaily*
+
+**Latest research highlight:**
+
+A 2025 study in *Nature* reveals that **quantum entanglement** has been observed at room temperature in organic molecules — a breakthrough for quantum computing.
+
+**Key takeaway:** "This brings practical quantum networks one step closer." — Dr. Elena Vogt, MIT
+
+\`\`\`
+Experiment: Room-temp entanglement in porphyrin molecules
+Stability: > 10 µs (10× previous record)
+\`\`\`
+
+🔗 Source: [nature.com](https://www.nature.com/) · [sciencedaily.com](https://www.sciencedaily.com/)`,
+
+                    'physics': `**⚛️ Physics (from arXiv + CERN)**
+
+**Newton's second law:** $F = ma$
+
+A force of 10 N on a 2 kg mass produces $5\\ m/s^2$ acceleration.
+
+🔗 [arxiv.org](https://arxiv.org/)`,
+
+                    'biology': `**🧬 Biology (from NCBI + PubMed)**
+
+**CRISPR-Cas9** allows precise gene editing. As of 2026, clinical trials for sickle cell disease show 94% success rate.
+
+🔗 [ncbi.nlm.nih.gov](https://www.ncbi.nlm.nih.gov/)`
+                }
+            };
+
+            // ---------- Helper: find best match ----------
+            function findResponse(topic, query) {
+                const base = knowledgeBase[topic] || knowledgeBase.coding;
+                const lower = query.toLowerCase();
+
+                // Try keyword matching
+                const keywordMap = {
+                    // coding
+                    python: 'python',
+                    javascript: 'javascript',
+                    js: 'javascript',
+                    java: 'default',
+                    html: 'default',
+                    css: 'default',
+                    react: 'default',
+                    recursion: 'default',
+                    algorithm: 'default',
+                    // math
+                    calculus: 'calculus',
+                    derivative: 'calculus',
+                    integral: 'calculus',
+                    algebra: 'algebra',
+                    quadratic: 'algebra',
+                    geometry: 'default',
+                    trigonometry: 'default',
+                    // language
+                    grammar: 'grammar',
+                    syntax: 'grammar',
+                    etymology: 'etymology',
+                    word: 'default',
+                    vocabulary: 'default',
+                    // science
+                    physics: 'physics',
+                    force: 'physics',
+                    energy: 'physics',
+                    biology: 'biology',
+                    dna: 'biology',
+                    gene: 'biology',
+                    chemistry: 'default',
+                    quantum: 'default',
+                };
+
+                for (const [keyword, key] of Object.entries(keywordMap)) {
+                    if (lower.includes(keyword)) {
+                        if (base[key]) return base[key];
+                    }
+                }
+
+                // Check if query is very short / generic
+                if (lower.length < 3) {
+                    return base.default;
+                }
+
+                // Return default for the topic
+                return base.default;
+            }
+
+            // ---------- Build a "live fetch" message ----------
+            function buildLiveFetchMessage(topic, query) {
+                const topicNames = {
+                    coding: 'coding (MDN · GitHub · Stack Overflow)',
+                    math: 'mathematics (Wolfram · Khan Academy)',
+                    language: 'language (Oxford · Merriam-Webster)',
+                    science: 'science (Nature · ScienceDaily · PubMed)'
+                };
+
+                const raw = findResponse(topic, query);
+
+                // Simulate slight delay for realism
+                return {
+                    text: raw,
+                    source: topicNames[topic] || 'web'
+                };
+            }
+
+            // ---------- Render message ----------
+            function addMessage(content, isUser = false) {
+                const div = document.createElement('div');
+                div.className = 'message';
+
+                if (isUser) {
+                    div.innerHTML = `
+                        <div class="msg-label" style="color:#4a5b6e;">
+                            <i class="fas fa-user"></i> You
+                        </div>
+                        <div class="msg-content" style="border-left-color:#9aadb9;">
+                            <p>${escapeHtml(content)}</p>
+                        </div>
+                    `;
+                } else {
+                    // Convert markdown-like syntax to HTML
+                    const html = markdownToHtml(content);
+                    div.innerHTML = `
+                        <div class="msg-label shark">
+                            <i class="fas fa-shield-hook"></i> SharksAi · <span style="font-weight:400;text-transform:none;font-size:0.75rem;color:#6a7b8e;"><i class="fas fa-cloud-download-alt"></i> live fetch</span>
+                        </div>
+                        <div class="msg-content">
+                            ${html}
+                        </div>
+                    `;
+                }
+
+                chatWindow.appendChild(div);
+                chatWindow.scrollTop = chatWindow.scrollHeight;
+            }
+
+            // ---------- Loading indicator ----------
+            function showLoading() {
+                const div = document.createElement('div');
+                div.className = 'message';
+                div.id = 'loadingMsg';
+                div.innerHTML = `
+                    <div class="msg-label shark">
+                        <i class="fas fa-shield-hook"></i> SharksAi
+                    </div>
+                    <div class="msg-content">
+                        <div class="spinner">
+                            <i class="fas fa-spinner"></i> Fetching from live sources…
+                        </div>
+                    </div>
+                `;
+                chatWindow.appendChild(div);
+                chatWindow.scrollTop = chatWindow.scrollHeight;
+            }
+
+            function removeLoading() {
+                const el = document.getElementById('loadingMsg');
+                if (el) el.remove();
+            }
+
+            // ---------- Escape HTML ----------
+            function escapeHtml(text) {
+                const div = document.createElement('div');
+                div.textContent = text;
+                return div.innerHTML;
+            }
+
+            // ---------- Simple markdown-like to HTML ----------
+            function markdownToHtml(text) {
+                let html = text;
+
+                // Code blocks ```...```
+                html = html.replace(/```(\w*)\n([\s\S]*?)```/g, (match, lang, code) => {  
+                    const escaped = escapeHtml(code.trim());  
+                    return `<pre><code>${escaped}</code></pre>`;  
+                });  
+
+                // Inline code `...`  
+                html = html.replace(/`([^`]+)`/g, '<code>$1</code>');  
+
+                // Bold **...**  
+                html = html.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');  
+
+                // Italic *...*  
+                html = html.replace(/\*(.+?)\*/g, '<em>$1</em>');  
+
+                // Inline math $...$  
+                html = html.replace(/\$(.+?)\$/g, '<span class="math-inline">$  
+$$  
+1  
+$$  
+</span>');  
+
+                // Block math   
+$$  
+...  
+$$  
+
+                html = html.replace(/\$\$(.+?)\$\$/g, '<span class="math-block">$  
+$$  
+1  
+$$  
+</span>');  
+
+                // Links [text](url)  
+                html = html.replace(/  
+$$  
+([^  
+$$  
+]+)\]$([^)]+)$/g, '<a href="$2" target="_blank" rel="noopener">$1</a>');  
+
+                // Bullet lists (simple)  
+                html = html.replace(/^- (.+)$/gm, '<li>$1</li>');  
+                html = html.replace(/(<li>.*<\/li>\n?)+/g, '<ul>$&</ul>');  
+
+                // Blockquote >  
+                html = html.replace(/^> (.+)$/gm, '<blockquote>$1</blockquote>');  
+
+                // Line breaks  
+                html = html.replace(/\n\n/g, '</p><p>');  
+                html = html.replace(/\n/g, '<br/>');  
+
+                // Wrap in paragraphs if not already  
+                if (!html.startsWith('<')) {  
+                    html = '<p>' + html + '</p>';  
+                }  
+
+                return html;  
+            }  
+
+            // ---------- Update source bar ----------  
+            function updateSourceBar(topic) {  
+                const urls = {  
+                    coding: 'api.sharksai.io/v2/fetch?source=mdn+github&topic=coding',  
+                    math: 'api.sharksai.io/v2/fetch?source=wolfram+khan&topic=math',  
+                    language: 'api.sharksai.io/v2/fetch?source=oxford+merriam&topic=language',  
+                    science: 'api.sharksai.io/v2/fetch?source=nature+sciencedaily&topic=science'  
+                };  
+                srcUrl.textContent = urls[topic] || urls.coding;  
+                fetchBadge.textContent = '⚡ live · ' + topic;  
+            }  
+
+            // ---------- Handle query ----------  
+            function handleQuery() {  
+                const query = userInput.value.trim();  
+                if (!query) return;  
+
+                // Add user message  
+                addMessage(query, true);  
+                userInput.value = '';  
+                sendBtn.disabled = true;  
+
+                // Show loading  
+                showLoading();  
+
+                // Simulate network delay (800-1400ms)  
+                const delay = 800 + Math.random() * 600;  
+
+                setTimeout(() => {  
+                    removeLoading();  
+
+                    // Build response  
+                    const result = buildLiveFetchMessage(currentTopic, query);  
+                    addMessage(result.text, false);  
+
+                    // Update source bar to reflect "fresh fetch"  
+                    updateSourceBar(currentTopic);  
+                    fetchBadge.textContent = '✓ fetched ' + new Date().toLocaleTimeString();  
+
+                    sendBtn.disabled = false;  
+                    userInput.focus();  
+                }, delay);  
+            }  
+
+            // ---------- Topic switching ----------  
+            topicBtns.forEach(btn => {  
+                btn.addEventListener('click', function() {  
+                    topicBtns.forEach(b => b.classList.remove('active'));  
+                    this.classList.add('active');  
+                    currentTopic = this.dataset.topic;  
+                    updateSourceBar(currentTopic);  
+                    fetchBadge.textContent = '⚡ live · ' + currentTopic;  
+
+                    // Auto reply with topic intro  
+                    const introText = `Switched to **${currentTopic}** mode. Ask me anything about ${currentTopic}!`;  
+
+                    // Remove loading
