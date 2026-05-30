@@ -1,0 +1,26 @@
+javascript:(async () => {
+    const getReact = (el) => {
+        for (const key in el) {
+            if (key.startsWith("__reactInternalInstance$") || key.startsWith("__reactFiber$")) return el[key];
+        }
+    };
+
+    const fiber = getReact(document.querySelector("#app > div > div"));
+    const stateNode = fiber.return.stateNode;
+
+    const hack = (state) => {
+        if (state && state.question) {
+            state.question.correctAnswers = state.question.answers;
+        }
+    };
+
+    const originalSetState = stateNode.setState.bind(stateNode);
+    stateNode.setState = function(nextState, callback) {
+        hack(nextState);
+        return originalSetState(nextState, callback);
+    };
+
+    hack(stateNode.state);
+    stateNode.forceUpdate();
+})();
+
